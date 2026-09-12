@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Engineer Portfolio & Digital CV
 
-## Getting Started
+A high-performance, minimalist developer portfolio and digital CV designed for software engineers. Built with Next.js 14, TypeScript, Tailwind CSS, and the GitHub REST API.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## What Makes This Different
+
+- **Substance Over Gimmicks**: Clean, restrained editorial aesthetic inspired by senior engineering sites (Linear, Paco, Vercel). No cheesy animated terminal text or neon gradients.
+- **Real Technical Case Studies**: Projects are presented with problem statements, architectural decisions, and verifiable outcomes rather than generic descriptions.
+- **Live GitHub Synchronization**: Auto-fetches and displays your public GitHub repositories in real-time with search, language filters, star counts, and direct links.
+- **Digital CV / Resume**: Structured chronology highlighting ownership, technical competencies, and impact.
+- **Zero-Config Vercel Deployment**: Ready to deploy in seconds on the Vercel free tier.
+
+---
+
+## 1. Quick Setup & Customization
+
+All personal information, featured projects, skills, and experience live in a single file:
+
+```typescript
+// Edit this file to customize your portfolio:
+src/config/site.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Key fields to update:
+- `name`: Your full name.
+- `title`: e.g. "Software Engineer", "Full-Stack Developer".
+- `githubUsername`: Your actual GitHub username (this syncs your repositories live!).
+- `email`: Your professional email for contact inquiries.
+- `featuredProjects`: Highlight your top 2–4 flagship projects with architecture details.
+- `experience`: Your milestones, open-source work, or education.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 2. Run Locally
 
-## Learn More
+```bash
+cd portfolio
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 3. Deploying to Vercel (Free)
 
-## Deploy on Vercel
+### Method A: Via GitHub (Recommended)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create a new empty repository on [github.com](https://github.com/new) named `portfolio`.
+2. Push your code:
+   ```bash
+   cd portfolio
+   git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/portfolio.git
+   git push -u origin main
+   ```
+3. Go to [vercel.com/new](https://vercel.com/new).
+4. Select your `portfolio` repository and click **Deploy**.
+5. Your site is live! Any future `git push` automatically redeploys your portfolio.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Method B: Via Vercel CLI
+
+```bash
+cd portfolio
+npx vercel
+```
+Follow the interactive prompts to deploy directly from your terminal.
