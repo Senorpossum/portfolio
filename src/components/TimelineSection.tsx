@@ -9,10 +9,10 @@ export default function TimelineSection() {
         {/* Header */}
         <div className="mb-10">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
-            Curriculum Vitae
+            Timeline
           </h2>
           <p className="text-xl font-medium text-zinc-100">
-            Work Experience & Background
+            My Journey & Background
           </p>
         </div>
 

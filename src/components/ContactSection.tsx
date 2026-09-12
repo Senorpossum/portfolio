@@ -18,20 +18,20 @@ export default function ContactSection() {
       <div className="max-w-4xl mx-auto px-6">
         <div className="mb-8">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
-            Inquiries
+            Get In Touch
           </h2>
           <p className="text-xl font-medium text-zinc-100">
-            Get in Touch
+            Let&apos;s Connect
           </p>
           <p className="text-sm text-zinc-400 max-w-lg mt-2">
-            I am available for contract development, freelance engineering, and full-stack software roles.
+            I&apos;m always excited to talk about code, collaborate on open-source projects, or discuss junior engineering roles and internships.
           </p>
         </div>
 
         <div className="p-6 rounded-lg bg-zinc-900/30 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-1">
             <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider block">
-              Direct Contact
+              Direct Email
             </span>
             <a
               href={`mailto:${siteConfig.email}`}
@@ -64,7 +64,7 @@ export default function ContactSection() {
               href={`mailto:${siteConfig.email}`}
               className="inline-flex items-center gap-1.5 bg-zinc-100 hover:bg-white text-zinc-950 font-medium px-4 py-2 rounded transition-colors"
             >
-              <span>Compose Email</span>
+              <span>Say Hello</span>
               <ArrowUpRightIcon className="w-3.5 h-3.5" />
             </a>
 

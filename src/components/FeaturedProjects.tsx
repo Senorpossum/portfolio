@@ -10,15 +10,15 @@ export default function FeaturedProjects() {
         {/* Section Title */}
         <div className="mb-10">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
-            Case Studies
+            Featured Work
           </h2>
           <p className="text-xl font-medium text-zinc-100">
-            Selected Technical Projects
+            Projects I&apos;ve Built
           </p>
         </div>
 
         {/* Project List */}
-        <div className="space-y-12">
+        <div className="space-y-10">
           {siteConfig.featuredProjects.map((project) => (
             <article
               key={project.id}
@@ -43,7 +43,7 @@ export default function FeaturedProjects() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-zinc-300 hover:text-white transition-colors"
                     >
-                      <span>Live Deployment</span>
+                      <span>Live Site</span>
                       <ArrowUpRightIcon className="w-3 h-3" />
                     </a>
                   )}
@@ -55,7 +55,7 @@ export default function FeaturedProjects() {
                       className="inline-flex items-center gap-1 text-zinc-400 hover:text-zinc-200 transition-colors"
                     >
                       <GithubIcon className="w-3 h-3" />
-                      <span>Source</span>
+                      <span>Code</span>
                     </a>
                   )}
                 </div>
@@ -70,14 +70,14 @@ export default function FeaturedProjects() {
               <div className="space-y-3 text-sm leading-relaxed mb-6">
                 <div>
                   <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider block mb-1">
-                    Problem & Context
+                    Why I Built It
                   </span>
                   <p className="text-zinc-300">{project.problem}</p>
                 </div>
 
                 <div>
                   <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider block mb-1">
-                    Architecture & Implementation
+                    How It Works
                   </span>
                   <p className="text-zinc-300">{project.solution}</p>
                 </div>
@@ -85,7 +85,7 @@ export default function FeaturedProjects() {
                 {project.metrics && (
                   <div className="pt-1">
                     <span className="font-mono text-xs text-emerald-400">
-                      Outcome: {project.metrics}
+                      Key takeaway: {project.metrics}
                     </span>
                   </div>
                 )}
