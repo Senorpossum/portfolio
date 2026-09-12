@@ -61,7 +61,7 @@ export const siteConfig = {
     {
       id: "ecc-patcher",
       title: "ECC-Patcher",
-      year: "2024",
+      year: "2026",
       tagline: "Autonomous AST code repair & verification pipeline",
       problem:
         "When using AI coding assistants on real codebases, whole-file rewrites often cause syntax errors and waste tokens. I wanted to build a tool that makes precise, surgical changes.",
@@ -75,7 +75,7 @@ export const siteConfig = {
     {
       id: "dev-portfolio",
       title: "Personal Portfolio & Digital CV",
-      year: "2024",
+      year: "2026",
       tagline: "Minimalist portfolio with live GitHub repository synchronization",
       problem:
         "I wanted a digital CV that reflects my actual active work on GitHub without having to manually copy-paste repository updates every time I start a new project.",
@@ -89,7 +89,7 @@ export const siteConfig = {
     {
       id: "data-pipeline",
       title: "Resilient Data Extraction Service",
-      year: "2024",
+      year: "2026",
       tagline: "Concurrent asynchronous scraping and data normalization engine",
       problem:
         "Extracting data from dynamic web pages often breaks when connections drop or rate limits kick in. I wanted to learn how to build a resilient, fault-tolerant scraper.",
@@ -104,7 +104,7 @@ export const siteConfig = {
 
   experience: [
     {
-      period: "2024 — Present",
+      period: "2026 — Present",
       role: "Student Developer & Independent Projects",
       organization: "Self-Directed Learning",
       location: "Remote",
@@ -116,7 +116,7 @@ export const siteConfig = {
       skills: ["Next.js", "TypeScript", "Python", "Git", "REST APIs"],
     },
     {
-      period: "2023 — 2024",
+      period: "2026",
       role: "Software Development Fundamentals & Exploration",
       organization: "Personal Studies & Practical Coding",
       location: "United Kingdom",

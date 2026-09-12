@@ -84,18 +84,25 @@ export default function GithubRepositories() {
         }
         return true;
       })
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+      .sort((a, b) => {
+        const timeA = new Date(a.pushed_at || a.updated_at).getTime();
+        const timeB = new Date(b.pushed_at || b.updated_at).getTime();
+        return timeB - timeA;
+      });
   }, [repos, hideForks, selectedLang, query]);
 
-  const formatRelativeDate = (dateStr: string) => {
+  const formatRelativeDate = (dateStr?: string) => {
+    if (!dateStr) return "recently";
     try {
-      const diff = Date.now() - new Date(dateStr).getTime();
+      const date = new Date(dateStr);
+      const diff = Date.now() - date.getTime();
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      if (days <= 0) return "today";
-      if (days === 1) return "yesterday";
-      if (days < 30) return `${days}d ago`;
+      if (days <= 0) return "updated today";
+      if (days === 1) return "updated yesterday";
+      if (days < 30) return `updated ${days}d ago`;
       const months = Math.floor(days / 30);
-      return `${months}mo ago`;
+      if (months < 12) return `updated ${months}mo ago`;
+      return `updated ${date.getFullYear()}`;
     } catch {
       return "recently";
     }
@@ -289,7 +296,7 @@ export default function GithubRepositories() {
                     )}
 
                     <span className="text-[11px] text-zinc-400">
-                      {formatRelativeDate(repo.updated_at)}
+                      {formatRelativeDate(repo.pushed_at || repo.updated_at)}
                     </span>
                   </div>
                 </div>

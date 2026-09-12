@@ -10,6 +10,8 @@ export interface GithubRepo {
   language: string | null;
   topics: string[];
   updated_at: string;
+  pushed_at?: string;
+  created_at?: string;
   fork: boolean;
   archived: boolean;
 }
@@ -18,64 +20,72 @@ export const FALLBACK_REPOS: GithubRepo[] = [
   {
     id: 101,
     name: "ecc-patcher",
-    full_name: "evan/ecc-patcher",
+    full_name: "Senorpossum/ecc-patcher",
     description:
       "Autonomous surgical code repair agent that diagnoses failing test suites and verifies fixes with instant rollback.",
-    html_url: "https://github.com",
+    html_url: "https://github.com/Senorpossum/portfolio",
     homepage: null,
     stargazers_count: 14,
     forks_count: 3,
     language: "Python",
     topics: ["code-repair", "ast", "cli", "pytest", "automation"],
     updated_at: new Date().toISOString(),
+    pushed_at: new Date().toISOString(),
+    created_at: "2026-01-15T10:00:00Z",
     fork: false,
     archived: false,
   },
   {
     id: 102,
-    name: "digital-cv-portfolio",
-    full_name: "evan/digital-cv-portfolio",
+    name: "portfolio",
+    full_name: "Senorpossum/portfolio",
     description:
-      "High-performance developer portfolio with live GitHub sync, responsive sleek dark UI, and Vercel zero-config deploy.",
-    html_url: "https://github.com",
-    homepage: "https://portfolio.vercel.app",
+      "Minimalist developer portfolio with live GitHub sync, responsive sleek dark UI and Vercel zero-config deploy.",
+    html_url: "https://github.com/Senorpossum/portfolio",
+    homepage: null,
     stargazers_count: 9,
     forks_count: 2,
     language: "TypeScript",
     topics: ["nextjs", "react", "tailwindcss", "portfolio", "vercel"],
     updated_at: new Date().toISOString(),
+    pushed_at: new Date().toISOString(),
+    created_at: "2026-02-10T14:30:00Z",
     fork: false,
     archived: false,
   },
   {
     id: 103,
     name: "data-scraper-engine",
-    full_name: "evan/data-scraper-engine",
+    full_name: "Senorpossum/data-scraper-engine",
     description:
-      "Resilient asynchronous web scraping pipeline with proxy rotation, schema validation, and SQL persistence.",
-    html_url: "https://github.com",
+      "Resilient asynchronous web scraping pipeline with proxy rotation, schema validation and SQL persistence.",
+    html_url: "https://github.com/Senorpossum/portfolio",
     homepage: null,
     stargazers_count: 7,
     forks_count: 1,
     language: "Python",
     topics: ["playwright", "scraping", "fastapi", "docker"],
     updated_at: new Date().toISOString(),
+    pushed_at: new Date().toISOString(),
+    created_at: "2026-03-01T09:15:00Z",
     fork: false,
     archived: false,
   },
   {
     id: 104,
     name: "terminal-cli-utilities",
-    full_name: "evan/terminal-cli-utilities",
+    full_name: "Senorpossum/terminal-cli-utilities",
     description:
-      "Collection of fast, single-binary CLI tools for developer productivity, log streaming, and system metrics.",
-    html_url: "https://github.com",
+      "Collection of fast, single-binary CLI tools for developer productivity, log streaming and system metrics.",
+    html_url: "https://github.com/Senorpossum/portfolio",
     homepage: null,
     stargazers_count: 5,
     forks_count: 0,
     language: "Go",
     topics: ["cli", "golang", "productivity", "terminal"],
     updated_at: new Date().toISOString(),
+    pushed_at: new Date().toISOString(),
+    created_at: "2026-04-12T16:20:00Z",
     fork: false,
     archived: false,
   },
@@ -104,13 +114,9 @@ export async function fetchUserRepos(username: string): Promise<{
   isFallback: boolean;
   error?: string;
 }> {
-  if (!username || username === "your-github-username" || username === "evan") {
-    // When default placeholder is used, still attempt to fetch if valid username, else fallback
-  }
-
   try {
     const res = await fetch(
-      `https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=100`,
+      `https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=pushed&per_page=100`,
       {
         headers: {
           Accept: "application/vnd.github.v3+json",
