@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/site";
-import { GithubIcon, ArrowUpRightIcon, MailIcon } from "@/components/Icons";
+import { GithubIcon, LinkedinIcon, ArrowUpRightIcon, MailIcon } from "@/components/Icons";
 
 export default function Hero() {
   return (
@@ -45,6 +45,16 @@ export default function Hero() {
             >
               <GithubIcon className="w-3.5 h-3.5" />
               <span>github.com/{siteConfig.githubUsername}</span>
+            </a>
+
+            <a
+              href={siteConfig.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800 px-3.5 py-2 rounded-md transition-colors"
+            >
+              <LinkedinIcon className="w-3.5 h-3.5" />
+              <span>LinkedIn</span>
             </a>
 
             <a

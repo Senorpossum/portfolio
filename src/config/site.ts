@@ -29,13 +29,13 @@ export const siteConfig = {
   name: "Evan",
   title: "Passionate Student Software Developer",
   location: "United Kingdom",
-  bio: "I'm an aspiring software developer with a genuine passion for building things that work well. I spend my time programming full-stack web applications, experimenting with automation and CLI utilities, and learning how systems function under the hood. Always curious, constantly building, and eager to learn from experienced developers.",
-  status: "Open to junior roles, internships & freelance projects",
+  bio: "I'm an aspiring software developer with a genuine passion for building things that work well. I spend my time programming full-stack web applications, experimenting with automation and CLI utilities and learning how systems function under the hood. Always curious, constantly building and eager to learn from experienced developers.",
+  status: "Open to junior roles, internships and freelance projects",
   githubUsername: "Senorpossum",
   email: "evan.flowsentinel@gmail.com",
   socials: {
     github: "https://github.com/Senorpossum",
-    linkedin: "https://linkedin.com",
+    linkedin: "https://www.linkedin.com/in/evan-thompson-3a1816436",
     twitter: "https://x.com",
   },
   skills: [
@@ -66,7 +66,7 @@ export const siteConfig = {
       problem:
         "When using AI coding assistants on real codebases, whole-file rewrites often cause syntax errors and waste tokens. I wanted to build a tool that makes precise, surgical changes.",
       solution:
-        "Built a CLI in Python that inspects failing test tracebacks, uses Python's AST parser to isolate only the relevant code frames, enforces strict search/replace patch grammar, and automatically rolls back changes via Git if linting or pytest fails.",
+        "Built a CLI in Python that inspects failing test tracebacks, uses Python's AST parser to isolate only the relevant code frames, enforces strict search/replace block grammar and automatically rolls back changes via Git if linting or pytest fails.",
       stack: ["Python", "AST", "Pytest", "Ruff", "Git", "CLI"],
       githubUrl: "https://github.com/Senorpossum/portfolio",
       liveUrl: "",
@@ -84,7 +84,7 @@ export const siteConfig = {
       stack: ["Next.js", "TypeScript", "Tailwind CSS", "GitHub API", "Vercel"],
       githubUrl: "https://github.com/Senorpossum/portfolio",
       liveUrl: "",
-      metrics: "Live sync with GitHub repositories, search filtering & 100/100 performance",
+      metrics: "Live sync with GitHub repositories, search filtering and 100/100 performance",
     },
     {
       id: "data-pipeline",
@@ -94,7 +94,7 @@ export const siteConfig = {
       problem:
         "Extracting data from dynamic web pages often breaks when connections drop or rate limits kick in. I wanted to learn how to build a resilient, fault-tolerant scraper.",
       solution:
-        "Created an asynchronous data scraper in Python utilizing Playwright and FastAPI, featuring exponential backoff retries, schema validation with Pydantic, and export to structured database formats.",
+        "Created an asynchronous data scraper in Python utilizing Playwright and FastAPI, featuring exponential backoff retries, schema validation with Pydantic and export to structured database formats.",
       stack: ["Python", "FastAPI", "Playwright", "PostgreSQL", "Docker"],
       githubUrl: "https://github.com/Senorpossum/portfolio",
       liveUrl: "",
@@ -109,9 +109,9 @@ export const siteConfig = {
       organization: "Self-Directed Learning",
       location: "Remote",
       description: [
-        "Building practical full-stack projects using TypeScript, React, Next.js, and Python.",
-        "Exploring automated testing, AST code parsing, and CLI tool design.",
-        "Actively learning best practices for Git workflows, code reviews, and production deployment on Vercel.",
+        "Building practical full-stack projects using TypeScript, React, Next.js and Python.",
+        "Exploring automated testing, AST code parsing and CLI tool design.",
+        "Actively learning best practices for Git workflows, code reviews and production deployment on Vercel.",
       ],
       skills: ["Next.js", "TypeScript", "Python", "Git", "REST APIs"],
     },
@@ -121,9 +121,9 @@ export const siteConfig = {
       organization: "Personal Studies & Practical Coding",
       location: "United Kingdom",
       description: [
-        "Studied programming fundamentals, object-oriented principles, and data structures.",
+        "Studied programming fundamentals, object-oriented principles and data structures.",
         "Built interactive frontends and backend services with SQL database persistence.",
-        "Practiced working with Linux terminal environments, shell scripts, and version control.",
+        "Practiced working with Linux terminal environments, shell scripts and version control.",
       ],
       skills: ["JavaScript", "Python", "SQL", "HTML/CSS", "Linux Basics"],
     },

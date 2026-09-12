@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
-import { MailIcon, CopyIcon, CheckIcon, GithubIcon, ArrowUpRightIcon } from "@/components/Icons";
+import { MailIcon, CopyIcon, CheckIcon, GithubIcon, LinkedinIcon, ArrowUpRightIcon } from "@/components/Icons";
 
 export default function ContactSection() {
   const [copied, setCopied] = useState(false);
@@ -24,7 +24,7 @@ export default function ContactSection() {
             Let&apos;s Connect
           </p>
           <p className="text-sm text-zinc-400 max-w-lg mt-2">
-            I&apos;m always excited to talk about code, collaborate on open-source projects, or discuss junior engineering roles and internships.
+            I&apos;m always excited to talk about code, collaborate on open-source projects or discuss junior engineering roles and internships.
           </p>
         </div>
 
@@ -76,6 +76,16 @@ export default function ContactSection() {
               title="GitHub Profile"
             >
               <GithubIcon className="w-4 h-4" />
+            </a>
+
+            <a
+              href={siteConfig.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 p-2 rounded transition-colors"
+              title="LinkedIn Profile"
+            >
+              <LinkedinIcon className="w-4 h-4" />
             </a>
           </div>
         </div>
