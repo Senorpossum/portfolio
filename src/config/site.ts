@@ -31,10 +31,10 @@ export const siteConfig = {
   location: "United Kingdom",
   bio: "Full-stack software engineer building reliable web applications, automation tooling, and developer infrastructure. Focused on clean system design, TypeScript, Python, and modern cloud deployment.",
   status: "Available for contract & full-time engineering roles",
-  githubUsername: "evan", // Set your GitHub username here to load all your public repos
+  githubUsername: "Senorpossum",
   email: "evan@example.com",
   socials: {
-    github: "https://github.com",
+    github: "https://github.com/Senorpossum",
     linkedin: "https://linkedin.com",
     twitter: "https://x.com",
   },
