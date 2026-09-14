@@ -38,7 +38,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#080b14] text-slate-100 flex flex-col relative overflow-hidden">
+    <main className="min-h-screen bg-[#080b14] text-slate-100 flex flex-col relative overflow-x-hidden">
       {/* Dynamic 60fps Mouse-Interactive Background with Ambient Aura & Particle Grid */}
       <InteractiveBackground />
 

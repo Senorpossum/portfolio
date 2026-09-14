@@ -51,7 +51,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "nav-projects",
         title: "Go to Featured Projects",
         category: "Navigation",
-        icon: <LayersIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <LayersIcon className="w-3.5 h-3.5 text-slate-400" />,
         action: () => {
           onClose();
           window.location.hash = "#projects";
@@ -61,7 +61,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "nav-repos",
         title: "Go to Live GitHub Repositories",
         category: "Navigation",
-        icon: <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <GithubIcon className="w-3.5 h-3.5 text-slate-400" />,
         action: () => {
           onClose();
           window.location.hash = "#repositories";
@@ -71,7 +71,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "nav-experience",
         title: "Go to Experience & Timeline",
         category: "Navigation",
-        icon: <TerminalIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <TerminalIcon className="w-3.5 h-3.5 text-slate-400" />,
         action: () => {
           onClose();
           window.location.hash = "#experience";
@@ -81,7 +81,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "nav-skills",
         title: "Go to Skills & Tools",
         category: "Navigation",
-        icon: <LayersIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <LayersIcon className="w-3.5 h-3.5 text-slate-400" />,
         action: () => {
           onClose();
           window.location.hash = "#skills";
@@ -91,7 +91,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "nav-contact",
         title: "Go to Contact",
         category: "Navigation",
-        icon: <MailIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <MailIcon className="w-3.5 h-3.5 text-slate-400" />,
         action: () => {
           onClose();
           window.location.hash = "#contact";
@@ -119,7 +119,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "action-copy-email",
         title: `Copy email (${siteConfig.email})`,
         category: "Actions",
-        icon: <CopyIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <CopyIcon className="w-3.5 h-3.5 text-slate-400" />,
         shortcut: "Copy",
         action: () => {
           navigator.clipboard.writeText(siteConfig.email);
@@ -131,7 +131,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "action-open-github",
         title: "Open GitHub Profile",
         category: "Actions",
-        icon: <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <GithubIcon className="w-3.5 h-3.5 text-slate-400" />,
         shortcut: "↗",
         action: () => {
           window.open(siteConfig.socials.github, "_blank");
@@ -142,7 +142,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         id: "action-open-linkedin",
         title: "Open LinkedIn Profile",
         category: "Actions",
-        icon: <LinkedinIcon className="w-3.5 h-3.5 text-zinc-400" />,
+        icon: <LinkedinIcon className="w-3.5 h-3.5 text-slate-400" />,
         shortcut: "↗",
         action: () => {
           window.open(siteConfig.socials.linkedin, "_blank");
