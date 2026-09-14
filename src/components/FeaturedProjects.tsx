@@ -1,41 +1,66 @@
 "use client";
 
-import { siteConfig } from "@/config/site";
-import { GithubIcon, ArrowUpRightIcon } from "@/components/Icons";
+import { siteConfig, Project } from "@/config/site";
+import { GithubIcon, ArrowUpRightIcon, TerminalIcon } from "@/components/Icons";
+import SpotlightCard from "@/components/SpotlightCard";
 
-export default function FeaturedProjects() {
+interface FeaturedProjectsProps {
+  onSelectProject?: (project: Project) => void;
+}
+
+export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsProps) {
   return (
     <section id="projects" className="py-16 border-t border-zinc-800/60">
       <div className="max-w-4xl mx-auto px-6">
         {/* Section Title */}
-        <div className="mb-10">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
-            Featured Work
-          </h2>
-          <p className="text-xl font-medium text-zinc-100">
-            Projects I&apos;ve Built
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10 gap-2">
+          <div>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
+              Featured Work
+            </h2>
+            <p className="text-xl font-medium text-zinc-100">
+              Projects I&apos;ve Built
+            </p>
+          </div>
+          <span className="text-xs font-mono text-zinc-500">
+            Click any project to inspect its architecture
+          </span>
         </div>
 
         {/* Project List */}
-        <div className="space-y-10">
+        <div className="space-y-8">
           {siteConfig.featuredProjects.map((project) => (
-            <article
+            <SpotlightCard
               key={project.id}
-              className="p-6 rounded-lg bg-zinc-900/30 border border-zinc-800/80 hover:border-zinc-700 transition-colors"
+              className="p-6 cursor-pointer hover:border-zinc-700 transition-colors group"
+              onClick={() => onSelectProject?.(project)}
             >
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-lg font-semibold text-zinc-100">
-                    {project.title}
+                  <h3 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors flex items-center gap-2">
+                    <span>{project.title}</span>
+                    <span className="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      [inspect]
+                    </span>
                   </h3>
                   <span className="text-xs font-mono text-zinc-500">
                     {project.year}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs font-mono">
+                <div
+                  className="flex items-center gap-3 text-xs font-mono"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => onSelectProject?.(project)}
+                    className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
+                  >
+                    <TerminalIcon className="w-3.5 h-3.5" />
+                    <span>Architecture</span>
+                  </button>
+
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
@@ -47,6 +72,7 @@ export default function FeaturedProjects() {
                       <ArrowUpRightIcon className="w-3 h-3" />
                     </a>
                   )}
+
                   {project.githubUrl && (
                     <a
                       href={project.githubUrl}
@@ -96,13 +122,13 @@ export default function FeaturedProjects() {
                 {project.stack.map((tech) => (
                   <span
                     key={tech}
-                    className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-700/50"
+                    className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
-            </article>
+            </SpotlightCard>
           ))}
         </div>
       </div>

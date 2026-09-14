@@ -15,15 +15,28 @@ import {
   SearchIcon,
   ArrowUpRightIcon,
   RefreshIcon,
+  CopyIcon,
+  XIcon,
 } from "@/components/Icons";
+import { useToast } from "@/components/Toast";
+
+interface GithubUserProfile {
+  avatar_url: string;
+  public_repos: number;
+  followers: number;
+  bio: string | null;
+}
 
 export default function GithubRepositories() {
   const [username, setUsername] = useState(siteConfig.githubUsername);
   const [activeUser, setActiveUser] = useState(siteConfig.githubUsername);
   const [repos, setRepos] = useState<GithubRepo[]>([]);
+  const [userProfile, setUserProfile] = useState<GithubUserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isFallback, setIsFallback] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  const { showToast } = useToast();
 
   // Filters
   const [query, setQuery] = useState("");
@@ -34,11 +47,28 @@ export default function GithubRepositories() {
     setLoading(true);
     setStatusMessage(null);
     try {
+      // Fetch repos
       const result = await fetchUserRepos(user);
       setRepos(result.repos);
       setIsFallback(result.isFallback);
       if (result.error) {
         setStatusMessage(result.error);
+      }
+
+      // Fetch user profile stats
+      try {
+        const userRes = await fetch(`https://api.github.com/users/${encodeURIComponent(user)}`);
+        if (userRes.ok) {
+          const profileData = await userRes.json();
+          setUserProfile({
+            avatar_url: profileData.avatar_url,
+            public_repos: profileData.public_repos,
+            followers: profileData.followers,
+            bio: profileData.bio,
+          });
+        }
+      } catch {
+        // Non-critical, fallback to null
       }
     } catch {
       setRepos(FALLBACK_REPOS);
@@ -60,13 +90,21 @@ export default function GithubRepositories() {
     }
   };
 
-  const languages = useMemo(() => {
-    const set = new Set<string>();
+  // Extract language counts
+  const languageCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
     repos.forEach((r) => {
-      if (r.language) set.add(r.language);
+      if (r.language) {
+        counts[r.language] = (counts[r.language] || 0) + 1;
+      }
     });
-    return ["all", ...Array.from(set)];
+    return counts;
   }, [repos]);
+
+  const languages = useMemo(() => {
+    const langs = Object.keys(languageCounts);
+    return ["all", ...langs];
+  }, [languageCounts]);
 
   const filtered = useMemo(() => {
     return repos
@@ -108,6 +146,11 @@ export default function GithubRepositories() {
     }
   };
 
+  const handleCopyClone = (repoUrl: string, repoName: string) => {
+    navigator.clipboard.writeText(`git clone ${repoUrl}.git`);
+    showToast(`Copied clone command for ${repoName}`);
+  };
+
   return (
     <section id="repositories" className="py-16 border-t border-zinc-800/60">
       <div className="max-w-4xl mx-auto px-6">
@@ -126,17 +169,38 @@ export default function GithubRepositories() {
           </div>
         </div>
 
-        {/* Sync Controls */}
-        <div className="p-4 rounded-lg bg-zinc-900/30 border border-zinc-800 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
-            <GithubIcon className="w-4 h-4 text-zinc-400 shrink-0" />
-            <span>Target GitHub Account:</span>
-            <span className="text-zinc-100 font-semibold">@{activeUser}</span>
-            {isFallback && (
-              <span className="text-[10px] text-zinc-500 border border-zinc-800 px-1.5 py-0.5 rounded">
-                Showcase Mode
-              </span>
+        {/* Sync Controls & Profile Card */}
+        <div className="p-4 rounded-xl bg-zinc-900/30 border border-zinc-800 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            {userProfile?.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={userProfile.avatar_url}
+                alt={activeUser}
+                className="w-9 h-9 rounded-full border border-zinc-700 object-cover"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400">
+                <GithubIcon className="w-4 h-4" />
+              </div>
             )}
+            <div className="text-xs font-mono text-zinc-300">
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-100 font-semibold">@{activeUser}</span>
+                {isFallback && (
+                  <span className="text-[10px] text-zinc-500 border border-zinc-800 px-1.5 py-0.2 rounded">
+                    Showcase Mode
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] text-zinc-500 mt-0.5">
+                {userProfile ? (
+                  <span>{userProfile.public_repos} public repos &bull; {userProfile.followers} followers</span>
+                ) : (
+                  <span>Auto-sync enabled via GitHub REST API</span>
+                )}
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="flex items-center gap-2">
@@ -171,8 +235,16 @@ export default function GithubRepositories() {
               value={query}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
               placeholder="Filter by repository name or topic..."
-              className="w-full bg-zinc-900/40 border border-zinc-800 rounded-md pl-9 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-700 font-mono"
+              className="w-full bg-zinc-900/40 border border-zinc-800 rounded-md pl-9 pr-8 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-700 font-mono"
             />
+            {query && (
+              <button
+                onClick={() => setQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+              >
+                <XIcon className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           <label className="flex items-center gap-2 text-xs font-mono text-zinc-400 cursor-pointer select-none">
@@ -187,20 +259,33 @@ export default function GithubRepositories() {
         </div>
 
         {/* Languages tabs */}
-        <div className="flex flex-wrap gap-1 mb-6">
-          {languages.map((lang) => (
-            <button
-              key={lang}
-              onClick={() => setSelectedLang(lang)}
-              className={`text-xs font-mono px-2.5 py-1 rounded transition-colors ${
-                selectedLang === lang
-                  ? "bg-zinc-100 text-zinc-950 font-medium"
-                  : "bg-zinc-900/50 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
-              }`}
-            >
-              {lang === "all" ? "All" : lang}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-1.5 mb-6">
+          {languages.map((lang) => {
+            const isSelected = selectedLang === lang;
+            const count = lang === "all" ? repos.length : languageCounts[lang];
+            return (
+              <button
+                key={lang}
+                onClick={() => setSelectedLang(lang)}
+                className={`text-xs font-mono px-2.5 py-1 rounded transition-colors flex items-center gap-1.5 ${
+                  isSelected
+                    ? "bg-zinc-100 text-zinc-950 font-medium"
+                    : "bg-zinc-900/50 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
+                }`}
+              >
+                <span>{lang === "all" ? "All" : lang}</span>
+                {count !== undefined && (
+                  <span
+                    className={`text-[10px] px-1 rounded ${
+                      isSelected ? "bg-zinc-300 text-zinc-950" : "text-zinc-500"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Repositories List */}
@@ -226,7 +311,7 @@ export default function GithubRepositories() {
               return (
                 <div
                   key={repo.id}
-                  className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group hover:bg-zinc-900/20 px-2 -mx-2 rounded-lg transition-colors"
                 >
                   <div className="space-y-1.5 flex-1 min-w-0 pr-4">
                     <div className="flex items-center gap-2">
@@ -271,7 +356,7 @@ export default function GithubRepositories() {
                     )}
                   </div>
 
-                  {/* Metadata */}
+                  {/* Metadata & Actions */}
                   <div className="flex items-center gap-4 text-xs font-mono text-zinc-400 shrink-0">
                     {repo.language && (
                       <div className="flex items-center gap-1.5">
@@ -298,6 +383,14 @@ export default function GithubRepositories() {
                     <span className="text-[11px] text-zinc-400">
                       {formatRelativeDate(repo.pushed_at || repo.updated_at)}
                     </span>
+
+                    <button
+                      onClick={() => handleCopyClone(repo.html_url, repo.name)}
+                      className="p-1 rounded hover:bg-zinc-800 text-zinc-500 hover:text-zinc-200 transition-colors"
+                      title="Copy clone command"
+                    >
+                      <CopyIcon className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               );
