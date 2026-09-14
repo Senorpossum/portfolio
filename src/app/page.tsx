@@ -11,6 +11,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import CommandPalette from "@/components/CommandPalette";
 import ProjectModal from "@/components/ProjectModal";
+import InteractiveBackground from "@/components/InteractiveBackground";
 import { siteConfig, Project } from "@/config/site";
 
 export default function Home() {
@@ -37,15 +38,21 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-zinc-100 relative">
-      <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
-      <Hero />
-      <FeaturedProjects onSelectProject={(project) => setSelectedProject(project)} />
-      <GithubRepositories />
-      <TimelineSection />
-      <SkillsSection />
-      <ContactSection />
-      <Footer />
+    <main className="min-h-screen bg-[#080b14] text-slate-100 flex flex-col relative overflow-hidden">
+      {/* Dynamic 60fps Mouse-Interactive Background with Ambient Aura & Particle Grid */}
+      <InteractiveBackground />
+
+      {/* Primary Page Content */}
+      <div className="relative z-10 flex flex-col flex-1">
+        <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+        <Hero />
+        <FeaturedProjects onSelectProject={(project) => setSelectedProject(project)} />
+        <GithubRepositories />
+        <TimelineSection />
+        <SkillsSection />
+        <ContactSection />
+        <Footer />
+      </div>
 
       {/* Interactive Command Palette */}
       <CommandPalette

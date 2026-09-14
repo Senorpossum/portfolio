@@ -46,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans bg-zinc-950 text-zinc-100 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans bg-[#080b14] text-slate-100 antialiased selection:bg-indigo-500/25 selection:text-slate-100`}
       >
         <ToastProvider>
           {children}

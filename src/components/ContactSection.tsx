@@ -55,24 +55,24 @@ export default function ContactSection() {
   )}&body=${encodeURIComponent(mailtoBody)}`;
 
   return (
-    <section id="contact" className="py-20 border-t border-zinc-800/60">
+    <section id="contact" className="py-20 border-t border-slate-800/60">
       <div className="max-w-4xl mx-auto px-6">
         <div className="mb-10">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
+          <h2 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-2">
             Get In Touch
           </h2>
-          <p className="text-xl font-medium text-zinc-100">
+          <p className="text-xl font-medium text-slate-100">
             Let&apos;s Connect
           </p>
-          <p className="text-sm text-zinc-400 max-w-lg mt-2">
+          <p className="text-sm text-slate-400 max-w-lg mt-2">
             I&apos;m always excited to talk about code, collaborate on open-source projects or discuss junior engineering roles and internships.
           </p>
         </div>
 
         {/* Interactive Message Builder */}
-        <SpotlightCard className="p-6 sm:p-8 space-y-6">
+        <SpotlightCard className="p-6 sm:p-8 space-y-6 shadow-xl shadow-black/20">
           <div>
-            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider block mb-3">
+            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block mb-3">
               1. Select what you&apos;d like to discuss
             </span>
             <div className="flex flex-wrap gap-2">
@@ -84,8 +84,8 @@ export default function ContactSection() {
                     onClick={() => setSelectedTopic(topic)}
                     className={`text-xs font-mono px-3 py-1.5 rounded-lg transition-colors text-left ${
                       isActive
-                        ? "bg-zinc-100 text-zinc-950 font-semibold shadow"
-                        : "bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-zinc-700"
+                        ? "bg-slate-100 text-slate-950 font-semibold shadow"
+                        : "bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700"
                     }`}
                   >
                     {topic.label}
@@ -97,7 +97,7 @@ export default function ContactSection() {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                 2. Your Name or Company (Optional)
               </span>
             </div>
@@ -106,31 +106,31 @@ export default function ContactSection() {
               value={senderName}
               onChange={(e) => setSenderName(e.target.value)}
               placeholder="e.g. Alex from Acme Corp"
-              className="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg px-3.5 py-2 text-xs font-mono text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
+              className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3.5 py-2 text-xs font-mono text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
             />
           </div>
 
           {/* Drafted Preview */}
           <div className="space-y-2">
-            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider block">
+            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block">
               3. Message Preview
             </span>
-            <div className="rounded-lg bg-zinc-950/90 border border-zinc-800/80 p-4 font-mono text-xs text-zinc-300 space-y-2">
-              <div className="text-zinc-500 border-b border-zinc-800/60 pb-2">
-                <span className="text-zinc-400">Subject:</span> {selectedTopic.subject}
+            <div className="rounded-lg bg-slate-950/90 border border-slate-800/80 p-4 font-mono text-xs text-slate-300 space-y-2">
+              <div className="text-slate-500 border-b border-slate-800/60 pb-2">
+                <span className="text-slate-400">Subject:</span> {selectedTopic.subject}
               </div>
-              <div className="whitespace-pre-line text-zinc-400 leading-relaxed pt-1">
+              <div className="whitespace-pre-line text-slate-400 leading-relaxed pt-1">
                 {mailtoBody}
               </div>
             </div>
           </div>
 
           {/* Actions row */}
-          <div className="pt-2 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <a
                 href={mailtoUrl}
-                className="inline-flex items-center gap-2 bg-zinc-100 hover:bg-white text-zinc-950 font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
+                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-white text-slate-950 font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
               >
                 <MailIcon className="w-3.5 h-3.5" />
                 <span>Open in Email App</span>
@@ -139,9 +139,9 @@ export default function ContactSection() {
 
               <button
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 px-3.5 py-2 rounded-lg text-xs font-mono transition-colors"
+                className="inline-flex items-center gap-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700 px-3.5 py-2 rounded-lg text-xs font-mono transition-colors"
               >
-                <CopyIcon className="w-3.5 h-3.5 text-zinc-400" />
+                <CopyIcon className="w-3.5 h-3.5 text-slate-400" />
                 <span>Copy Email</span>
               </button>
             </div>
@@ -151,7 +151,7 @@ export default function ContactSection() {
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100 border border-zinc-800 transition-colors"
+                className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 transition-colors"
                 title="GitHub"
               >
                 <GithubIcon className="w-4 h-4" />
@@ -161,7 +161,7 @@ export default function ContactSection() {
                 href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100 border border-zinc-800 transition-colors"
+                className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 transition-colors"
                 title="LinkedIn"
               >
                 <LinkedinIcon className="w-4 h-4" />

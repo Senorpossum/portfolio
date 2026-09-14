@@ -186,37 +186,37 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-28 px-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-28 px-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-xl bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden font-sans"
+        className="w-full max-w-xl rounded-xl bg-[#0c111e] border border-slate-800 shadow-2xl overflow-hidden font-sans"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
         {/* Search header */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-zinc-800/80 bg-zinc-900/40">
-          <SearchIcon className="w-4 h-4 text-zinc-500 shrink-0" />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-800/80 bg-slate-900/50">
+          <SearchIcon className="w-4 h-4 text-slate-400 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Type a command, project or section..."
-            className="w-full bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none font-mono"
+            className="w-full bg-transparent text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none font-mono"
           />
           <button
             onClick={onClose}
-            className="text-zinc-500 hover:text-zinc-300 p-1 rounded transition-colors"
+            className="text-slate-400 hover:text-slate-200 p-1 rounded transition-colors"
           >
             <XIcon className="w-4 h-4" />
           </button>
         </div>
 
         {/* Results list */}
-        <div className="max-h-80 overflow-y-auto p-2 divide-y divide-zinc-900">
+        <div className="max-h-80 overflow-y-auto p-2 divide-y divide-slate-900/80">
           {filteredItems.length === 0 ? (
-            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+            <div className="py-8 text-center text-xs font-mono text-slate-400">
               No matching commands or projects found.
             </div>
           ) : (
@@ -229,8 +229,8 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left text-xs transition-colors ${
                     isSelected
-                      ? "bg-zinc-800/80 text-zinc-100"
-                      : "text-zinc-400 hover:text-zinc-200"
+                      ? "bg-slate-800/80 text-slate-100"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -238,12 +238,12 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
                     <span className="font-medium">{item.title}</span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-500">
-                    <span className="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
+                    <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">
                       {item.category}
                     </span>
                     {item.shortcut && (
-                      <span className="text-zinc-400">{item.shortcut}</span>
+                      <span className="text-slate-400">{item.shortcut}</span>
                     )}
                   </div>
                 </button>
@@ -253,14 +253,14 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         </div>
 
         {/* Footer shortcuts */}
-        <div className="px-4 py-2 bg-zinc-900/60 border-t border-zinc-800/80 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+        <div className="px-4 py-2 bg-slate-900/70 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
           <div className="flex items-center gap-3">
-            <span><kbd className="px-1 py-0.5 rounded bg-zinc-800 text-zinc-300">↑↓</kbd> navigate</span>
-            <span><kbd className="px-1 py-0.5 rounded bg-zinc-800 text-zinc-300">↵</kbd> select</span>
-            <span><kbd className="px-1 py-0.5 rounded bg-zinc-800 text-zinc-300">esc</kbd> close</span>
+            <span><kbd className="px-1 py-0.5 rounded bg-slate-800 text-slate-300">↑↓</kbd> navigate</span>
+            <span><kbd className="px-1 py-0.5 rounded bg-slate-800 text-slate-300">↵</kbd> select</span>
+            <span><kbd className="px-1 py-0.5 rounded bg-slate-800 text-slate-300">esc</kbd> close</span>
           </div>
           <div className="flex items-center gap-1">
-            <CommandIcon className="w-3 h-3 text-zinc-400" />
+            <CommandIcon className="w-3 h-3 text-slate-400" />
             <span>Command Palette</span>
           </div>
         </div>

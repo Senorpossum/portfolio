@@ -11,6 +11,13 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        obsidian: {
+          950: "#04060a",
+          900: "#080b14",
+          850: "#0c111e",
+          800: "#111728",
+          700: "#1a2238",
+        },
       },
     },
   },

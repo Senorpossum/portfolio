@@ -9,15 +9,15 @@ export default function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
 
   return (
-    <section id="skills" className="py-16 border-t border-zinc-800/60">
+    <section id="skills" className="py-16 border-t border-slate-800/60">
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10 gap-2">
           <div>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-2">
               Tooling
             </h2>
-            <p className="text-xl font-medium text-zinc-100">
+            <p className="text-xl font-medium text-slate-100">
               Skills & Technical Proficiencies
             </p>
           </div>
@@ -26,7 +26,7 @@ export default function SkillsSection() {
               Active filter: <span className="underline">{activeSkill}</span>
               <button
                 onClick={() => setActiveSkill(null)}
-                className="ml-2 text-zinc-500 hover:text-zinc-300"
+                className="ml-2 text-slate-500 hover:text-slate-300"
               >
                 (clear)
               </button>
@@ -42,8 +42,8 @@ export default function SkillsSection() {
               className="p-5 space-y-3"
             >
               <div className="flex items-center gap-2">
-                <CpuIcon className="w-3.5 h-3.5 text-zinc-400" />
-                <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold">
+                <CpuIcon className="w-3.5 h-3.5 text-slate-400" />
+                <h3 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
                   {group.category}
                 </h3>
               </div>
@@ -58,7 +58,7 @@ export default function SkillsSection() {
                       className={`text-xs font-mono px-2.5 py-1 rounded transition-colors text-left ${
                         isSelected
                           ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50"
-                          : "bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-zinc-700 hover:text-white"
+                          : "bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white"
                       }`}
                     >
                       {item}
