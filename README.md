@@ -67,3 +67,13 @@ cd portfolio
 npx vercel
 ```
 Follow the interactive prompts to deploy directly from your terminal.
+
+---
+
+## 4. Branch Protection & CI/CD
+
+To safeguard the main branch from accidental deletion, history rewrites, and broken builds:
+
+- **CI/CD Pipeline**: Automated GitHub Actions workflow (`.github/workflows/ci.yml`) runs ESLint and Next.js production builds on every push and pull request.
+- **Local Pre-Push Hook**: Configured in `.githooks/pre-push` to block `git push origin --delete main` and non-fast-forward force-pushes locally.
+- **GitHub Branch Rulesets**: Detailed setup instructions for GitHub repository rulesets (blocking deletions and requiring status checks) can be found in [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md).
