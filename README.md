@@ -72,8 +72,9 @@ Follow the interactive prompts to deploy directly from your terminal.
 
 ## 4. Branch Protection & CI/CD
 
-To safeguard the main branch from accidental deletion, history rewrites, and broken builds:
+To safeguard `main` and release branches from accidental deletion, history rewrites, and broken builds:
 
-- **CI/CD Pipeline**: Automated GitHub Actions workflow (`.github/workflows/ci.yml`) runs ESLint and Next.js production builds on every push and pull request.
-- **Local Pre-Push Hook**: Configured in `.githooks/pre-push` to block `git push origin --delete main` and non-fast-forward force-pushes locally.
+- **CI/CD Pipeline**: Automated GitHub Actions workflow (`.github/workflows/ci.yml`) runs ESLint and Next.js production builds on every push and pull request across `main`, `master`, `production`, and `release/**`.
+- **Local Pre-Push Hook**: Configured in `.githooks/pre-push` to intercept and block branch deletions (`git push origin --delete <branch>`) and force-pushes locally across all protected branches.
+- **Verification & Automation**: Use `./scripts/setup-branch-protection.sh --verify` to inspect remote/local status, or `./scripts/test-branch-protection.sh` to run the 22-test automated verification suite.
 - **GitHub Branch Rulesets**: Detailed setup instructions for GitHub repository rulesets (blocking deletions and requiring status checks) can be found in [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md).
