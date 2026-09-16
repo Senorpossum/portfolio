@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 
 export default function TimelineSection() {
   return (
-    <section id="experience" className="py-16 border-t border-slate-800/60">
+    <section id="experience" className="py-16 border-t border-slate-800/60 scroll-mt-24">
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <div className="mb-10">

@@ -24,8 +24,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-3 duration-200">
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-[#0c111e]/95 border border-slate-700/80 text-slate-100 text-xs font-mono shadow-2xl shadow-black/80 backdrop-blur-md">
+        <div className="fixed bottom-6 right-6 z-50 pointer-events-none animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-[#0c111e]/95 border border-slate-700/80 text-slate-100 text-xs font-mono shadow-2xl shadow-black/80 backdrop-blur-md">
             <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400">
               <CheckIcon className="w-3.5 h-3.5" />
             </span>

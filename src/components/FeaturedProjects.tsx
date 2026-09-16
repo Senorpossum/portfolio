@@ -19,7 +19,7 @@ export default function FeaturedProjects({
     projects && projects.length > 0 ? projects.slice(0, 3) : siteConfig.featuredProjects.slice(0, 3);
 
   return (
-    <section id="projects" className="py-16 border-t border-slate-800/60">
+    <section id="projects" className="py-16 border-t border-slate-800/60 scroll-mt-24">
       <div className="max-w-4xl mx-auto px-6">
         {/* Section Title */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10 gap-2">

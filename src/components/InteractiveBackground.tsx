@@ -14,12 +14,10 @@ interface Particle {
 
 export default function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
@@ -29,13 +27,13 @@ export default function InteractiveBackground() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    // High DPI scaling (capped at 2 for 60fps performance and minimal fill-rate overhead)
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    // Optimized DPR: capped at 1.5 to maintain crisp rendering on Retina while saving 44% fill-rate overhead
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
     ctx.scale(dpr, dpr);
 
-    // Dynamic coordinates & motion state
+    // Dynamic coordinates and motion state
     let mouseX = width / 2;
     let mouseY = height * 0.35;
     let targetMouseX = mouseX;
@@ -64,9 +62,9 @@ export default function InteractiveBackground() {
     };
     motionQuery.addEventListener("change", onMotionChange);
 
-    // Particle setup
+    // Optimized particle count: 22 on desktop and 10 on mobile for 60-120 FPS performance
     const isMobile = width < 768;
-    const particleCount = isMobile ? 20 : 42;
+    const particleCount = isMobile ? 10 : 22;
     const particles: Particle[] = [];
 
     const palette = [
@@ -80,8 +78,8 @@ export default function InteractiveBackground() {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.32,
-        vy: (Math.random() - 0.5) * 0.32,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
         radius: Math.random() * 1.1 + 0.9,
         baseAlpha: Math.random() * 0.3 + 0.15,
         color: palette[Math.floor(Math.random() * palette.length)],
@@ -103,7 +101,6 @@ export default function InteractiveBackground() {
     };
 
     const handlePointerLeave = () => {
-      // Smoothly transition back to autonomous drift when pointer exits window
       if (idleTimer) clearTimeout(idleTimer);
       isUserInteracting = false;
     };
@@ -134,9 +131,9 @@ export default function InteractiveBackground() {
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
       ctx.scale(dpr, dpr);
     };
 
@@ -163,11 +160,11 @@ export default function InteractiveBackground() {
     window.addEventListener("resize", handleResize);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Initialize CSS variables
-    container.style.setProperty("--cursor-x", `${mouseX.toFixed(1)}px`);
-    container.style.setProperty("--cursor-y", `${mouseY.toFixed(1)}px`);
-
     let lastTime = performance.now();
+    const mouseRadius = 135;
+    const mouseRadiusSq = mouseRadius * mouseRadius;
+    const connectionDist = 85;
+    const connectionDistSq = connectionDist * connectionDist;
 
     const render = (now: number) => {
       if (document.hidden || prefersReducedMotion) {
@@ -178,122 +175,99 @@ export default function InteractiveBackground() {
       const delta = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
-      // When user is not actively interacting (idle or touch released), smoothly drift along Lissajous curve
+      // When user is not actively interacting, smoothly drift along Lissajous curve
       if (!isUserInteracting) {
-        idleTime += delta * 0.45;
-        targetMouseX = width * 0.5 + Math.cos(idleTime * 0.65) * (width * 0.26);
-        targetMouseY = height * 0.35 + Math.sin(idleTime * 0.95) * (height * 0.16);
+        idleTime += delta * 0.4;
+        targetMouseX = width * 0.5 + Math.cos(idleTime * 0.65) * (width * 0.25);
+        targetMouseY = height * 0.35 + Math.sin(idleTime * 0.95) * (height * 0.15);
       }
 
-      // Frame-rate independent linear interpolation for consistent 60fps/120fps feel
+      // Frame-rate independent linear interpolation
       const lerpFactor = 1 - Math.exp(-7 * delta);
       mouseX += (targetMouseX - mouseX) * lerpFactor;
       mouseY += (targetMouseY - mouseY) * lerpFactor;
 
-      // Update CSS variables for radial spotlight and ambient aura
-      container.style.setProperty("--cursor-x", `${mouseX.toFixed(1)}px`);
-      container.style.setProperty("--cursor-y", `${mouseY.toFixed(1)}px`);
-
       ctx.clearRect(0, 0, width, height);
 
-      const mouseRadius = 140;
-      const mouseRadiusSq = mouseRadius * mouseRadius;
-      const connectionDist = 90;
-      const connectionDistSq = connectionDist * connectionDist;
+      // 1. Hardware-accelerated radial cursor aura on canvas (zero DOM/CSS mask recalculations)
+      const cursorGlow = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 360);
+      cursorGlow.addColorStop(0, "rgba(56, 189, 248, 0.08)");
+      cursorGlow.addColorStop(0.45, "rgba(99, 102, 241, 0.035)");
+      cursorGlow.addColorStop(1, "rgba(8, 11, 20, 0)");
+      ctx.fillStyle = cursorGlow;
+      ctx.fillRect(0, 0, width, height);
 
-      // Arrays for batched drawing to eliminate draw-call overhead
-      const filamentTargets: { x: number; y: number; alpha: number }[] = [];
-      const particlePairs: { x1: number; y1: number; x2: number; y2: number; alpha: number }[] = [];
+      // Update particle positions and compute mouse deflection
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
 
+        if (p.x < -10) p.x = width + 10;
+        else if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        else if (p.y > height + 10) p.y = -10;
+
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq < mouseRadiusSq && distSq > 1) {
+          const dist = Math.sqrt(distSq);
+          const force = (1 - dist / mouseRadius) * 0.6;
+          p.x += (dx / dist) * force * 1.2;
+          p.y += (dy / dist) * force * 1.2;
+        }
+      }
+
+      // 2. Inter-particle constellation lines (zero heap allocations, single stroke pass)
+      ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
-
-        // Move particle
-        p1.x += p1.vx;
-        p1.y += p1.vy;
-
-        // Smooth wrap-around boundaries
-        if (p1.x < -12) p1.x = width + 12;
-        else if (p1.x > width + 12) p1.x = -12;
-        if (p1.y < -12) p1.y = height + 12;
-        else if (p1.y > height + 12) p1.y = -12;
-
-        // Mouse distance
-        const dxMouse = p1.x - mouseX;
-        const dyMouse = p1.y - mouseY;
-        const distMouseSq = dxMouse * dxMouse + dyMouse * dyMouse;
-
-        let extraAlpha = 0;
-        if (distMouseSq < mouseRadiusSq) {
-          const distMouse = Math.sqrt(distMouseSq);
-          if (distMouse > 1) {
-            // Guard against division by zero
-            const force = (1 - distMouse / mouseRadius) * 0.75;
-            p1.x += (dxMouse / distMouse) * force * 1.5;
-            p1.y += (dyMouse / distMouse) * force * 1.5;
-            extraAlpha = (1 - distMouse / mouseRadius) * 0.4;
-          }
-
-          // Subtle filament tether toward cursor when interacting
-          if (isUserInteracting) {
-            filamentTargets.push({
-              x: p1.x,
-              y: p1.y,
-              alpha: (1 - distMouse / mouseRadius) * 0.22,
-            });
-          }
-        }
-
-        // Inter-particle links
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < connectionDistSq) {
-            const alpha = (1 - distSq / connectionDistSq) * 0.12;
-            particlePairs.push({
-              x1: p1.x,
-              y1: p1.y,
-              x2: p2.x,
-              y2: p2.y,
-              alpha,
-            });
+          if (dx * dx + dy * dy < connectionDistSq) {
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
           }
         }
-
-        // Render particle dot
-        const finalAlpha = Math.min(1, p1.baseAlpha + extraAlpha);
-        ctx.beginPath();
-        ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p1.color}${finalAlpha.toFixed(2)})`;
-        ctx.fill();
       }
+      ctx.strokeStyle = "rgba(99, 102, 241, 0.11)";
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
 
-      // Batched draw: Inter-particle constellation lines
-      if (particlePairs.length > 0) {
+      // 3. Filament tethers toward cursor when user is interacting
+      if (isUserInteracting) {
         ctx.beginPath();
-        for (let k = 0; k < particlePairs.length; k++) {
-          const pair = particlePairs[k];
-          ctx.moveTo(pair.x1, pair.y1);
-          ctx.lineTo(pair.x2, pair.y2);
-        }
-        ctx.strokeStyle = "rgba(99, 102, 241, 0.09)";
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
-      }
-
-      // Batched draw: Cursor filament lines
-      if (filamentTargets.length > 0) {
-        ctx.beginPath();
-        for (let k = 0; k < filamentTargets.length; k++) {
-          ctx.moveTo(mouseX, mouseY);
-          ctx.lineTo(filamentTargets[k].x, filamentTargets[k].y);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          const dx = p.x - mouseX;
+          const dy = p.y - mouseY;
+          if (dx * dx + dy * dy < mouseRadiusSq) {
+            ctx.moveTo(mouseX, mouseY);
+            ctx.lineTo(p.x, p.y);
+          }
         }
         ctx.strokeStyle = "rgba(56, 189, 248, 0.18)";
-        ctx.lineWidth = 0.8;
+        ctx.lineWidth = 0.75;
         ctx.stroke();
+      }
+
+      // 4. Render particle dots
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const distSq = dx * dx + dy * dy;
+        const extraAlpha = distSq < mouseRadiusSq ? (1 - Math.sqrt(distSq) / mouseRadius) * 0.35 : 0;
+        const finalAlpha = Math.min(1, p.baseAlpha + extraAlpha);
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}${finalAlpha.toFixed(2)})`;
+        ctx.fill();
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -320,77 +294,47 @@ export default function InteractiveBackground() {
 
   return (
     <div
-      ref={containerRef}
-      className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
-      style={
-        {
-          "--cursor-x": "50vw",
-          "--cursor-y": "35vh",
-          transform: "translateZ(0)",
-        } as React.CSSProperties
-      }
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden transform-gpu will-change-transform"
+      style={{ transform: "translate3d(0, 0, 0)" }}
       aria-hidden="true"
     >
       {/* 1. Deep Obsidian Base Tone */}
       <div className="absolute inset-0 bg-[#080b14]" />
 
-      {/* 2. Sleek static radial ambient lights for rich color depth */}
+      {/* 2. Static multi-stop radial ambient glows (hardware composited with zero expensive blur filters) */}
       <div
-        className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full opacity-35 blur-[120px] pointer-events-none"
+        className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full pointer-events-none opacity-60"
         style={{
           background:
-            "radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(56, 189, 248, 0.12) 45%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(99, 102, 241, 0.18) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%)",
         }}
       />
       <div
-        className="absolute top-[40%] right-[-10%] w-[600px] h-[600px] rounded-full opacity-20 blur-[140px] pointer-events-none"
+        className="absolute top-[40%] right-[-8%] w-[550px] h-[550px] rounded-full pointer-events-none opacity-50"
         style={{
           background:
-            "radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(14, 165, 233, 0.16) 0%, transparent 70%)",
         }}
       />
       <div
-        className="absolute bottom-[-10%] left-[-5%] w-[700px] h-[500px] rounded-full opacity-20 blur-[130px] pointer-events-none"
+        className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[450px] rounded-full pointer-events-none opacity-50"
         style={{
           background:
-            "radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%)",
         }}
       />
 
-      {/* 3. Subtle dot texture matrix across the entire background */}
+      {/* 3. Static dot texture matrix */}
       <div
         className="absolute inset-0 opacity-[0.14] pointer-events-none"
         style={{
           backgroundImage:
-            "radial-gradient(rgba(148, 163, 184, 0.7) 1px, transparent 1px)",
+            "radial-gradient(rgba(148, 163, 184, 0.6) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
 
-      {/* 4. Mouse-Illuminated Grid Spotlight: dynamically reveals and highlights the grid near cursor */}
-      <div
-        className="absolute inset-0 transition-opacity duration-300 opacity-70 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(56, 189, 248, 0.45) 1.2px, transparent 1.2px)",
-          backgroundSize: "28px 28px",
-          maskImage:
-            "radial-gradient(360px circle at var(--cursor-x) var(--cursor-y), black 0%, transparent 85%)",
-          WebkitMaskImage:
-            "radial-gradient(360px circle at var(--cursor-x) var(--cursor-y), black 0%, transparent 85%)",
-        }}
-      />
-
-      {/* 5. Smooth Mouse-following Ambient Radiant Aura (GPU accelerated) */}
-      <div
-        className="absolute inset-0 transition-opacity duration-500 opacity-65 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(550px circle at var(--cursor-x) var(--cursor-y), rgba(56, 189, 248, 0.09) 0%, rgba(99, 102, 241, 0.06) 40%, transparent 80%)",
-        }}
-      />
-
-      {/* 6. Interactive Constellation & Dynamic Floating Nodes Canvas */}
+      {/* 4. GPU-Accelerated Interactive Canvas (renders cursor aura, constellation and particles) */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"

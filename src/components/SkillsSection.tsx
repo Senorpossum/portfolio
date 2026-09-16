@@ -9,7 +9,7 @@ export default function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
 
   return (
-    <section id="skills" className="py-16 border-t border-slate-800/60">
+    <section id="skills" className="py-16 border-t border-slate-800/60 scroll-mt-24">
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10 gap-2">

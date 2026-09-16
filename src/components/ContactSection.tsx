@@ -55,7 +55,7 @@ export default function ContactSection() {
   )}&body=${encodeURIComponent(mailtoBody)}`;
 
   return (
-    <section id="contact" className="py-20 border-t border-slate-800/60">
+    <section id="contact" className="py-20 border-t border-slate-800/60 scroll-mt-24 relative z-10">
       <div className="max-w-4xl mx-auto px-6">
         <div className="mb-10">
           <h2 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-2">
@@ -81,8 +81,9 @@ export default function ContactSection() {
                 return (
                   <button
                     key={topic.id}
+                    type="button"
                     onClick={() => setSelectedTopic(topic)}
-                    className={`text-xs font-mono px-3 py-1.5 rounded-lg transition-colors text-left ${
+                    className={`text-xs font-mono px-3 py-1.5 rounded-lg transition-colors text-left max-w-full break-words ${
                       isActive
                         ? "bg-slate-100 text-slate-950 font-semibold shadow"
                         : "bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700"
@@ -115,22 +116,22 @@ export default function ContactSection() {
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block">
               3. Message Preview
             </span>
-            <div className="rounded-lg bg-slate-950/90 border border-slate-800/80 p-4 font-mono text-xs text-slate-300 space-y-2">
-              <div className="text-slate-500 border-b border-slate-800/60 pb-2">
+            <div className="rounded-lg bg-slate-950/90 border border-slate-800/80 p-4 font-mono text-xs text-slate-300 space-y-2 overflow-hidden">
+              <div className="text-slate-500 border-b border-slate-800/60 pb-2 break-words">
                 <span className="text-slate-400">Subject:</span> {selectedTopic.subject}
               </div>
-              <div className="whitespace-pre-line text-slate-400 leading-relaxed pt-1">
+              <div className="whitespace-pre-line text-slate-400 leading-relaxed pt-1 break-words">
                 {mailtoBody}
               </div>
             </div>
           </div>
 
           {/* Actions row */}
-          <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-2.5">
               <a
                 href={mailtoUrl}
-                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-white text-slate-950 font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
+                className="inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-white text-slate-950 font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow flex-1 sm:flex-initial"
               >
                 <MailIcon className="w-3.5 h-3.5" />
                 <span>Open in Email App</span>
@@ -138,21 +139,23 @@ export default function ContactSection() {
               </a>
 
               <button
+                type="button"
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700 px-3.5 py-2 rounded-lg text-xs font-mono transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700 px-3.5 py-2 rounded-lg text-xs font-mono transition-colors flex-1 sm:flex-initial"
               >
                 <CopyIcon className="w-3.5 h-3.5 text-slate-400" />
                 <span>Copy Email</span>
               </button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2">
               <a
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 transition-colors"
                 title="GitHub"
+                aria-label="GitHub Profile"
               >
                 <GithubIcon className="w-4 h-4" />
               </a>
@@ -163,6 +166,7 @@ export default function ContactSection() {
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 transition-colors"
                 title="LinkedIn"
+                aria-label="LinkedIn Profile"
               >
                 <LinkedinIcon className="w-4 h-4" />
               </a>
