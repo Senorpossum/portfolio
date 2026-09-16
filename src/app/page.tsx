@@ -13,10 +13,13 @@ import CommandPalette from "@/components/CommandPalette";
 import ProjectModal from "@/components/ProjectModal";
 import InteractiveBackground from "@/components/InteractiveBackground";
 import { siteConfig, Project } from "@/config/site";
+import { fetchLatestProjects } from "@/lib/github";
 
 export default function Home() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>(siteConfig.featuredProjects);
+  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(true);
 
   // Global Command+K / Ctrl+K keyboard shortcut listener
   useEffect(() => {
@@ -30,8 +33,31 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Dynamically pull latest 3 projects from GitHub
+  useEffect(() => {
+    let isMounted = true;
+    fetchLatestProjects(siteConfig.githubUsername, 3)
+      .then((res) => {
+        if (isMounted && res.projects && res.projects.length > 0) {
+          setProjects(res.projects);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load GitHub projects:", err);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingProjects(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleSelectProjectId = (id: string) => {
-    const found = siteConfig.featuredProjects.find((p) => p.id === id);
+    const found =
+      projects.find((p) => p.id === id) ||
+      siteConfig.featuredProjects.find((p) => p.id === id);
     if (found) {
       setSelectedProject(found);
     }
@@ -46,7 +72,11 @@ export default function Home() {
       <div className="relative z-10 flex flex-col flex-1">
         <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
         <Hero />
-        <FeaturedProjects onSelectProject={(project) => setSelectedProject(project)} />
+        <FeaturedProjects
+          projects={projects}
+          isLoading={isLoadingProjects}
+          onSelectProject={(project) => setSelectedProject(project)}
+        />
         <GithubRepositories />
         <TimelineSection />
         <SkillsSection />
@@ -58,6 +88,7 @@ export default function Home() {
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
+        projects={projects}
         onSelectProject={handleSelectProjectId}
       />
 

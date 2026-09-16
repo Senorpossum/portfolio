@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { siteConfig } from "@/config/site";
+import { siteConfig, Project } from "@/config/site";
 import { useToast } from "@/components/Toast";
 import {
   SearchIcon,
@@ -27,10 +27,16 @@ interface CommandItem {
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
+  projects?: Project[];
   onSelectProject?: (projectId: string) => void;
 }
 
-export default function CommandPalette({ isOpen, onClose, onSelectProject }: CommandPaletteProps) {
+export default function CommandPalette({
+  isOpen,
+  onClose,
+  projects,
+  onSelectProject,
+}: CommandPaletteProps) {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +49,9 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [isOpen]);
+
+  const activeProjects =
+    projects && projects.length > 0 ? projects.slice(0, 3) : siteConfig.featuredProjects.slice(0, 3);
 
   const items: CommandItem[] = useMemo(
     () => [
@@ -99,7 +108,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
       },
 
       // Projects
-      ...siteConfig.featuredProjects.map((p) => ({
+      ...activeProjects.map((p) => ({
         id: `project-${p.id}`,
         title: `Inspect ${p.title}`,
         category: "Projects" as const,
@@ -150,7 +159,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectProject }: Com
         },
       },
     ],
-    [onClose, onSelectProject, showToast]
+    [onClose, onSelectProject, showToast, activeProjects]
   );
 
   const filteredItems = useMemo(() => {

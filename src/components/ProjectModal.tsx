@@ -44,14 +44,31 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   // Specific architectural steps for each project
   const getArchitectureFlow = (id: string) => {
-    switch (id) {
-      case "ecc-patcher":
+    const normalizedId = id.toLowerCase().replace(/-wip-?$/i, "").replace(/_wip_?$/i, "");
+    switch (normalizedId) {
+      case "blink":
         return [
-          { step: "01", title: "Traceback Analysis", desc: "Prunes vendor frames and isolates failing test call sites" },
-          { step: "02", title: "AST Frame Isolation", desc: "Extracts enclosing class and function blocks without full-file dumps" },
-          { step: "03", title: "Deterministic Patching", desc: "Applies exact search/replace grammar with line offset validation" },
-          { step: "04", title: "Layered Verification", desc: "Sequential gate (Syntax -> Ruff -> Pytest) with instant Git rollback on failure" },
+          { step: "01", title: "Video Capture Pipeline", desc: "OpenCV capture thread streams frames at 30-60 FPS into decoupled ring buffers" },
+          { step: "02", title: "Dual Landmarker Engine", desc: "MediaPipe face blendshapes calculate Eye Aspect Ratio while hand landmarks track 21 3D joint coordinates" },
+          { step: "03", title: "Spatial State Machine", desc: "Debounces micro-movements, tracks air mouse velocity vectors and classifies gestures through temporal state machines" },
+          { step: "04", title: "Native Action Dispatcher", desc: "Dispatches keyboard shortcuts, mouse events and shell commands via native X11/Wayland with FastAPI WebSocket telemetry" },
         ];
+      case "uscan":
+        return [
+          { step: "01", title: "Target Ingestion & Registry Sync", desc: "Normalizes usernames, emails or phone numbers against synced WhatsMyName, Maigret and Sherlock registries" },
+          { step: "02", title: "Anti-Bot & WAF Stealth Stack", desc: "Applies curl_cffi for authentic JA3 and JA4 TLS fingerprints with dynamic proxy pools and adaptive jitter" },
+          { step: "03", title: "Headless Escalation", desc: "Automatically delegates complex JavaScript challenges and clearance cookies to headless Playwright worker instances" },
+          { step: "04", title: "Multi-Interface Presentation", desc: "Streams normalized intelligence dossiers to rich terminal summaries, Textual TUI dashboards or FastAPI Server-Sent Events" },
+        ];
+      case "netscanandroid":
+      case "netscan":
+        return [
+          { step: "01", title: "Subnet & Socket Engine", desc: "Discovers active hosts via concurrent TCP socket probes, mDNS discovery and system ARP table sweeps" },
+          { step: "02", title: "Signal Processing & Kalman Filter", desc: "Passes raw Wi-Fi RSSI signals through a 1D Kalman filter state estimator to eliminate noise on 2.4 GHz, 5 GHz and 6 GHz bands" },
+          { step: "03", title: "Hardware-Accelerated UI", desc: "Renders custom Jetpack Compose Canvas frequency spectrum curves, force-directed topologies and IDW heatmaps" },
+          { step: "04", title: "Hardware-Backed Security", desc: "Persists audit logs into SQLCipher AES-256 databases protected by Android KeyStore, StrongBox and biometric authentication" },
+        ];
+      case "portfolio":
       case "dev-portfolio":
         return [
           { step: "01", title: "Next.js App Router", desc: "Server components and static prerendering for sub-100ms load times" },
@@ -59,12 +76,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           { step: "03", title: "Client Filtering", desc: "Instant search and language tag filtering with zero layout reflows" },
           { step: "04", title: "Vercel Edge Delivery", desc: "Automated git-push deployment with global edge CDN distribution" },
         ];
-      case "data-pipeline":
+      case "spec2test":
         return [
-          { step: "01", title: "Headless Ingestion", desc: "Asynchronous Playwright worker pool with rotating user agents" },
-          { step: "02", title: "Resilient Retries", desc: "Exponential backoff with randomized jitter to absorb rate limits" },
-          { step: "03", title: "Schema Normalization", desc: "Strict Pydantic type validation ensuring zero corrupt records" },
-          { step: "04", title: "SQL Persistence", desc: "Batch transactions into PostgreSQL with automated indexing" },
+          { step: "01", title: "User Story Ingestion", desc: "Parses markdown files, plain text specifications or Jira ticket bodies into structured UserStory AST objects" },
+          { step: "02", title: "Codebase Analysis", desc: "Inspects project structure, existing testing patterns and framework conventions to guide assertion style" },
+          { step: "03", title: "Test Suite Generation", desc: "Generates comprehensive unit and integration test suites covering happy paths, edge cases and security checks" },
+          { step: "04", title: "File Output & Reporting", desc: "Emits idiomatic test files alongside test-suite-metadata.json and markdown coverage summaries" },
         ];
       default:
         return [
@@ -76,7 +93,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     }
   };
 
-  const flow = getArchitectureFlow(project.id);
+  const flow = project.architectureFlow || getArchitectureFlow(project.id);
 
   return (
     <div

@@ -5,19 +5,34 @@ import { GithubIcon, ArrowUpRightIcon, TerminalIcon } from "@/components/Icons";
 import SpotlightCard from "@/components/SpotlightCard";
 
 interface FeaturedProjectsProps {
+  projects?: Project[];
+  isLoading?: boolean;
   onSelectProject?: (project: Project) => void;
 }
 
-export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsProps) {
+export default function FeaturedProjects({
+  projects,
+  isLoading = false,
+  onSelectProject,
+}: FeaturedProjectsProps) {
+  const displayProjects =
+    projects && projects.length > 0 ? projects.slice(0, 3) : siteConfig.featuredProjects.slice(0, 3);
+
   return (
     <section id="projects" className="py-16 border-t border-slate-800/60">
       <div className="max-w-4xl mx-auto px-6">
         {/* Section Title */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10 gap-2">
           <div>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-2">
-              Featured Work
-            </h2>
+            <div className="flex items-center gap-2 mb-2">
+              <h2 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold">
+                Featured Work
+              </h2>
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/60">
+                <span className={`w-1.5 h-1.5 rounded-full bg-cyan-400 ${isLoading ? "animate-ping" : "animate-pulse"}`} />
+                <span>Latest 3 from GitHub</span>
+              </span>
+            </div>
             <p className="text-xl font-medium text-slate-100">
               Projects I&apos;ve Built
             </p>
@@ -29,7 +44,7 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
 
         {/* Project List */}
         <div className="space-y-8">
-          {siteConfig.featuredProjects.map((project) => (
+          {displayProjects.map((project) => (
             <SpotlightCard
               key={project.id}
               className="p-6 cursor-pointer hover:border-slate-700/90 transition-colors group shadow-lg shadow-black/20"
