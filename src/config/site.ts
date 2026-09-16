@@ -66,6 +66,26 @@ export const siteConfig = {
 
   featuredProjects: [
     {
+      id: "portfolio",
+      title: "Developer Portfolio & Digital CV",
+      year: "2026",
+      tagline: "Minimalist developer portfolio with live GitHub synchronization and interactive terminal navigation",
+      problem:
+        "Student developer portfolios often rely on static copy that drifts from actual GitHub activity, creating maintenance overhead and failing to showcase genuine ongoing work.",
+      solution:
+        "Designed and built a fast Next.js 14 web app that connects directly to the GitHub REST API to pull the latest active repositories in real time, with Spotlight interactions, architecture breakdowns and zero-config Vercel edge deployment.",
+      stack: ["Next.js", "TypeScript", "Tailwind CSS", "GitHub API", "Vercel"],
+      githubUrl: "https://github.com/Senorpossum/portfolio",
+      liveUrl: "",
+      metrics: "Live sync with GitHub repositories, search filtering and 100/100 performance",
+      architectureFlow: [
+        { step: "01", title: "Next.js App Router", desc: "Server components and static prerendering for sub-100ms load times" },
+        { step: "02", title: "GitHub REST API Sync", desc: "Cached data fetching with live fallback for unauthenticated limits" },
+        { step: "03", title: "Client Filtering", desc: "Instant search and language tag filtering with zero layout reflows" },
+        { step: "04", title: "Vercel Edge Delivery", desc: "Automated git-push deployment with global edge CDN distribution" },
+      ],
+    },
+    {
       id: "blink",
       title: "Blink",
       year: "2026",
@@ -103,27 +123,6 @@ export const siteConfig = {
         { step: "02", title: "Anti-Bot & WAF Stealth Stack", desc: "Applies curl_cffi for authentic JA3 and JA4 TLS fingerprints with dynamic proxy pools and adaptive jitter" },
         { step: "03", title: "Headless Escalation", desc: "Automatically delegates complex JavaScript challenges and clearance cookies to headless Playwright worker instances" },
         { step: "04", title: "Multi-Interface Presentation", desc: "Streams normalized intelligence dossiers to rich terminal summaries, Textual TUI dashboards or FastAPI Server-Sent Events" },
-      ],
-    },
-    {
-      id: "netscanandroid-wip-",
-      title: "NetScan Android",
-      year: "2026",
-      tagline: "Offline-first Android network reconnaissance and Wi-Fi diagnostics suite",
-      problem:
-        "Most mobile network diagnostic tools bury basic telemetry behind subscriptions, upload discovery logs to cloud servers or fail to provide low-level socket inspection on mobile devices.",
-      solution:
-        "Created an offline-first Android application in Kotlin and Jetpack Compose featuring subnet sweeps, port scanning, raw socket probing, 1D Kalman filter RSSI smoothing, custom Canvas spectrum visualizers and hardware-backed SQLCipher encryption.",
-      stack: ["Kotlin", "Jetpack Compose", "Coroutines", "SQLCipher", "Android SDK", "Networking"],
-      githubUrl: "https://github.com/Senorpossum/NetScanAndroid-WIP-"
-,
-      liveUrl: "",
-      metrics: "100% offline-first local network audit engine with hardware-backed KeyStore security",
-      architectureFlow: [
-        { step: "01", title: "Subnet & Socket Engine", desc: "Discovers active hosts via concurrent TCP socket probes, mDNS discovery and system ARP table sweeps" },
-        { step: "02", title: "Signal Processing & Kalman Filter", desc: "Passes raw Wi-Fi RSSI signals through a 1D Kalman filter state estimator to eliminate noise on 2.4 GHz, 5 GHz and 6 GHz bands" },
-        { step: "03", title: "Hardware-Accelerated UI", desc: "Renders custom Jetpack Compose Canvas frequency spectrum curves, force-directed topologies and IDW heatmaps" },
-        { step: "04", title: "Hardware-Backed Security", desc: "Persists audit logs into SQLCipher AES-256 databases protected by Android KeyStore, StrongBox and biometric authentication" },
       ],
     },
   ] as Project[],

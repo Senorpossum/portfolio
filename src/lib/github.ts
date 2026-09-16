@@ -20,6 +20,24 @@ export interface GithubRepo {
 
 export const FALLBACK_REPOS: GithubRepo[] = [
   {
+    id: 104,
+    name: "portfolio",
+    full_name: "Senorpossum/portfolio",
+    description:
+      "Minimalist developer portfolio with live GitHub sync and interactive terminal navigation.",
+    html_url: "https://github.com/Senorpossum/portfolio",
+    homepage: null,
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "TypeScript",
+    topics: ["nextjs", "react", "tailwindcss", "portfolio", "vercel"],
+    updated_at: "2026-09-16T21:28:04Z",
+    pushed_at: "2026-09-16T21:28:00Z",
+    created_at: "2026-09-10T11:00:00Z",
+    fork: false,
+    archived: false,
+  },
+  {
     id: 101,
     name: "blink",
     full_name: "Senorpossum/blink",
@@ -70,24 +88,6 @@ export const FALLBACK_REPOS: GithubRepo[] = [
     updated_at: "2026-09-16T20:53:03Z",
     pushed_at: "2026-09-16T20:53:03Z",
     created_at: "2026-09-16T16:45:00Z",
-    fork: false,
-    archived: false,
-  },
-  {
-    id: 104,
-    name: "portfolio",
-    full_name: "Senorpossum/portfolio",
-    description:
-      "Minimalist developer portfolio with live GitHub sync and interactive terminal navigation.",
-    html_url: "https://github.com/Senorpossum/portfolio",
-    homepage: null,
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "TypeScript",
-    topics: ["nextjs", "react", "tailwindcss", "portfolio", "vercel"],
-    updated_at: "2026-09-14T09:00:50Z",
-    pushed_at: "2026-09-14T09:00:50Z",
-    created_at: "2026-09-10T11:00:00Z",
     fork: false,
     archived: false,
   },
@@ -251,23 +251,23 @@ export function mapGithubRepoToProject(repo: GithubRepo): Project {
     CURATED_PROJECT_DETAILS[normKey] ||
     CURATED_PROJECT_DETAILS[repo.name.toLowerCase()];
 
-  const year = repo.pushed_at || repo.updated_at
-    ? new Date(repo.pushed_at || repo.updated_at).getFullYear().toString()
-    : "2026";
+  const rawDate = repo.pushed_at || repo.updated_at;
+  const parsedYear = rawDate ? new Date(rawDate).getFullYear() : NaN;
+  const year = !isNaN(parsedYear) ? parsedYear.toString() : "2026";
 
   if (curated) {
     return {
       id: repo.name.toLowerCase(),
       title: curated.title,
       year,
-      tagline: repo.description || curated.tagline,
+      tagline: curated.tagline || repo.description || `Minimalist student developer project built on GitHub`,
       problem: curated.problem,
       solution: curated.solution,
       stack: curated.stack,
       githubUrl: repo.html_url,
       liveUrl: repo.homepage || curated.liveUrl || "",
       metrics:
-        repo.stargazers_count > 0
+        repo.stargazers_count && repo.stargazers_count > 0
           ? `${curated.metrics} (${repo.stargazers_count} star${repo.stargazers_count === 1 ? "" : "s"})`
           : curated.metrics,
       architectureFlow: curated.architectureFlow,
@@ -290,8 +290,8 @@ export function mapGithubRepoToProject(repo: GithubRepo): Project {
     githubUrl: repo.html_url,
     liveUrl: repo.homepage || "",
     metrics:
-      repo.stargazers_count > 0
-        ? `${repo.stargazers_count} GitHub star${repo.stargazers_count === 1 ? "" : "s"} &bull; Actively maintained`
+      repo.stargazers_count && repo.stargazers_count > 0
+        ? `${repo.stargazers_count} GitHub star${repo.stargazers_count === 1 ? "" : "s"} • Actively maintained`
         : "Active GitHub repository with clean test suites",
     architectureFlow: [
       { step: "01", title: "Input Interface", desc: `Validates incoming data structures and configuration parameters for ${title}` },
@@ -320,10 +320,14 @@ export async function fetchUserRepos(username: string): Promise<{
     );
 
     if (!res.ok) {
+      const errorMsg =
+        res.status === 403
+          ? "GitHub API rate limit reached. Displaying cached showcase repositories."
+          : `GitHub API status ${res.status}: Displaying showcase repositories.`;
       return {
         repos: FALLBACK_REPOS,
         isFallback: true,
-        error: `GitHub API status ${res.status}: Using showcase data. Update username in site.ts.`,
+        error: errorMsg,
       };
     }
 
@@ -357,12 +361,15 @@ export async function fetchLatestProjects(
     return true;
   });
 
+  const getRepoTime = (repo: GithubRepo): number => {
+    const dateStr = repo.pushed_at || repo.updated_at || repo.created_at;
+    if (!dateStr) return 0;
+    const time = new Date(dateStr).getTime();
+    return isNaN(time) ? 0 : time;
+  };
+
   // Sort by latest pushed_at or updated_at date descending
-  const sorted = [...validRepos].sort((a, b) => {
-    const timeA = new Date(a.pushed_at || a.updated_at).getTime();
-    const timeB = new Date(b.pushed_at || b.updated_at).getTime();
-    return timeB - timeA;
-  });
+  const sorted = [...validRepos].sort((a, b) => getRepoTime(b) - getRepoTime(a));
 
   const topRepos = sorted.slice(0, limit);
   const projects = topRepos.map(mapGithubRepoToProject);

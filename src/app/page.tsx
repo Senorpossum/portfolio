@@ -55,9 +55,20 @@ export default function Home() {
   }, []);
 
   const handleSelectProjectId = (id: string) => {
+    const cleanId = id.toLowerCase().replace(/-wip-?$/i, "").replace(/_wip_?$/i, "");
     const found =
-      projects.find((p) => p.id === id) ||
-      siteConfig.featuredProjects.find((p) => p.id === id);
+      projects.find(
+        (p) =>
+          p.id === id ||
+          p.id.toLowerCase() === id.toLowerCase() ||
+          p.id.toLowerCase().replace(/-wip-?$/i, "").replace(/_wip_?$/i, "") === cleanId
+      ) ||
+      siteConfig.featuredProjects.find(
+        (p) =>
+          p.id === id ||
+          p.id.toLowerCase() === id.toLowerCase() ||
+          p.id.toLowerCase().replace(/-wip-?$/i, "").replace(/_wip_?$/i, "") === cleanId
+      );
     if (found) {
       setSelectedProject(found);
     }
