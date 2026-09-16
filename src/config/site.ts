@@ -34,7 +34,7 @@ export interface SkillGroup {
 
 export const siteConfig = {
   name: "Evan",
-  title: "Passionate Student Software Developer",
+  title: "Student Software Developer",
   location: "United Kingdom",
   bio: "I'm an aspiring software developer with a genuine passion for building things that work well. I spend my time programming full-stack web applications, experimenting with automation and CLI utilities and learning how systems function under the hood. Always curious, constantly building and eager to learn from experienced developers.",
   status: "Open to junior roles, internships and freelance projects",
