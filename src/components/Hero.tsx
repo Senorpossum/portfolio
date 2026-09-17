@@ -9,21 +9,21 @@ export default function Hero() {
       <div className="max-w-4xl mx-auto px-6">
         <div className="space-y-6">
           {/* Status Indicator */}
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] text-zinc-300 font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800 text-[11px] text-slate-300 font-mono shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>{siteConfig.status}</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-zinc-100">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-slate-100">
             {siteConfig.name}
-            <span className="block text-zinc-400 font-normal text-xl sm:text-2xl mt-1.5">
+            <span className="block text-slate-400 font-normal text-xl sm:text-2xl mt-1.5">
               {siteConfig.title} &mdash; {siteConfig.location}
             </span>
           </h1>
 
           {/* Bio / Summary */}
-          <p className="text-base sm:text-lg text-zinc-300 max-w-2xl leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed font-normal">
             {siteConfig.bio}
           </p>
 
@@ -31,7 +31,7 @@ export default function Hero() {
           <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono">
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 bg-zinc-100 hover:bg-white text-zinc-950 font-medium px-4 py-2 rounded-md transition-colors"
+              className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-white text-slate-950 font-medium px-4 py-2 rounded-md transition-colors shadow-sm"
             >
               <span>Selected Work</span>
               <ArrowUpRightIcon className="w-3.5 h-3.5" />
@@ -41,7 +41,7 @@ export default function Hero() {
               href={siteConfig.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800 px-3.5 py-2 rounded-md transition-colors"
+              className="inline-flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-slate-100 border border-slate-800 px-3.5 py-2 rounded-md transition-colors"
             >
               <GithubIcon className="w-3.5 h-3.5" />
               <span>github.com/{siteConfig.githubUsername}</span>
@@ -51,7 +51,7 @@ export default function Hero() {
               href={siteConfig.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800 px-3.5 py-2 rounded-md transition-colors"
+              className="inline-flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-slate-100 border border-slate-800 px-3.5 py-2 rounded-md transition-colors"
             >
               <LinkedinIcon className="w-3.5 h-3.5" />
               <span>LinkedIn</span>
@@ -59,7 +59,7 @@ export default function Hero() {
 
             <a
               href={`mailto:${siteConfig.email}`}
-              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 px-2 py-2 transition-colors"
+              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-slate-200 px-2 py-2 transition-colors"
             >
               <MailIcon className="w-3.5 h-3.5" />
               <span>{siteConfig.email}</span>

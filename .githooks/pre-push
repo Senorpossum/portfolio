@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# .githooks/pre-push
+# Protects key branches from accidental remote deletion and force-push overwrites.
+
+set -euo pipefail
+
+# Regex pattern of protected branch names
+PROTECTED_PATTERN="^(main|master|production|release/.*|release)$"
+
+exit_code=0
+
+while read -r local_ref local_sha remote_ref remote_sha || [[ -n "${local_ref:-}" ]]; do
+  # Only inspect branch references under refs/heads/
+  if [[ "$remote_ref" =~ ^refs/heads/(.+)$ ]]; then
+    remote_branch="${BASH_REMATCH[1]}"
+  else
+    # Non-branch refs (e.g. tags, notes) are not subject to branch deletion rules
+    continue
+  fi
+
+  # Only inspect branches matching protected patterns
+  if [[ "$remote_branch" =~ $PROTECTED_PATTERN ]]; then
+
+    # Case 1: Remote branch deletion
+    # Deletion occurs when local_sha is all zeroes, local_ref is (delete), or empty
+    if [[ "$local_sha" =~ ^0+$ || "$local_ref" == "(delete)" || -z "$local_ref" ]]; then
+      echo "" >&2
+      echo "================================================================================" >&2
+      echo "🛑 [GIT BLOCKED] Deletion of protected branch '$remote_branch' is prohibited!" >&2
+      echo "   Repository policy prevents deleting protected branches on GitHub." >&2
+      echo "================================================================================" >&2
+      echo "" >&2
+      exit_code=1
+      continue
+    fi
+
+    # Case 2: Force push / history rewrite (non-fast-forward push)
+    # If the remote branch already exists (remote_sha is not all zeros), check ancestry
+    if [[ ! "$remote_sha" =~ ^0+$ ]]; then
+      if ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+        echo "" >&2
+        echo "================================================================================" >&2
+        echo "🛑 [GIT BLOCKED] Protected branch '$remote_branch' has remote commits not present locally." >&2
+        echo "   Please run 'git fetch origin $remote_branch' before pushing to avoid overwriting changes." >&2
+        echo "================================================================================" >&2
+        echo "" >&2
+        exit_code=1
+        continue
+      fi
+
+      if ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+        echo "" >&2
+        echo "================================================================================" >&2
+        echo "🛑 [GIT BLOCKED] Force-pushing to protected branch '$remote_branch' is prohibited!" >&2
+        echo "   Remote branch '$remote_branch' would lose commits (non-fast-forward)." >&2
+        echo "   To protect commit history, force-pushes are blocked." >&2
+        echo "================================================================================" >&2
+        echo "" >&2
+        exit_code=1
+        continue
+      fi
+    fi
+
+    # Case 3: Enforce PR-only push if STRICT_BRANCH_PROTECTION is set
+    if [[ "${STRICT_BRANCH_PROTECTION:-0}" == "1" ]]; then
+      echo "" >&2
+      echo "================================================================================" >&2
+      echo "🛑 [GIT BLOCKED] Direct push to protected branch '$remote_branch' is disabled." >&2
+      echo "   STRICT_BRANCH_PROTECTION is enabled." >&2
+      echo "   Please create a feature branch and submit a GitHub Pull Request." >&2
+      echo "================================================================================" >&2
+      echo "" >&2
+      exit_code=1
+      continue
+    fi
+  fi
+done
+
+exit $exit_code
+

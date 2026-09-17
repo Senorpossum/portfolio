@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# .githooks/pre-commit
+# Reminds or prevents direct commits to protected branches.
+
+set -euo pipefail
+
+PROTECTED_PATTERN="^(main|master|production|release/.*|release)$"
+
+# Get current branch name
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD")
+
+if [[ "$current_branch" =~ $PROTECTED_PATTERN ]]; then
+  if [[ "${STRICT_BRANCH_PROTECTION:-0}" == "1" ]]; then
+    echo "" >&2
+    echo "================================================================================" >&2
+    echo "🛑 [GIT BLOCKED] Direct commits to '$current_branch' are disabled." >&2
+    echo "   STRICT_BRANCH_PROTECTION is set to 1." >&2
+    echo "   Please create a feature branch (e.g. 'feature/<name>') to commit your work." >&2
+    echo "================================================================================" >&2
+    echo "" >&2
+    exit 1
+  else
+    echo "ℹ️  [Branch Info] Working directly on protected branch '$current_branch'."
+    echo "   Ensure changes pass 'npm run lint' and 'npm run build' before pushing."
+  fi
+fi
+
+exit 0
